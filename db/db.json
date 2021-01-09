@@ -1,0 +1,22 @@
+{
+    "products": [
+    {
+        "name": "HYPB34",
+        "price": 78,
+        "currency": "$",
+        "image_path": "images/img2.jpg"
+    },
+    {
+        "name": "BTBDS64",
+        "price": 97,
+        "currency": "$",
+        "image_path": "images/img.jpg"
+    },
+    {
+        "name": "Apple Pro",
+        "price": 168,
+        "currency": "$",
+        "image_path": "images/img1.jpg"
+    }
+    ]
+}
