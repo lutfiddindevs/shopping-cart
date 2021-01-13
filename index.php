@@ -1,11 +1,18 @@
 <?php 
+session_start();
+
+$_SESSION['cart'] = $_SESSION['cart'] ?? [];
 require "./db/utils.php";
 
 $products = get_products();
 
 if (isset($_POST["add"])) {
-   echo "Added product to cart with index=".$_POST['product_key']. "to cart";
-   echo "Cart producy name is " . $products[$_POST['product_key']]['name'];
+   $cart_element =& $_SESSION['cart'][$_POST['product_key']];
+   if (!isset($cart_element)) {
+     $cart_element = 0;
+   }
+   $cart_element++;
+   $_SESSION['success'] = "Element <b>" . $products[$_POST['product_key']]['name'] . "</b> added to your cart";
 }
  ?>
 <!doctype html>
@@ -23,6 +30,39 @@ if (isset($_POST["add"])) {
   <body style="background-color: #00bfff">
     <div class="container text-center">
       <h1 class="my-3">Shopping cart Application</h1>
+      <div class="accordion" id="accordionExample">
+        <div class="row justify-content-center">
+          <div class="col-6">
+            <?php if (isset($_SESSION['success'])): ?>
+                <div class="alert alert-success"> 
+                  <?php   echo $_SESSION['success'] ?>
+                <?php unset($_SESSION['success']) ?>
+                </div> 
+            <?php endif ?>
+        <div class="accordion-item">
+         <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            Shopping cart <?php echo count($_SESSION['cart']); ?>
+            </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                 <h5>Shopping cart elements</h5>
+                      <ul class="list-group list-group-flush">
+                        <?php foreach ($_SESSION['cart'] as $key => $amount): ?>
+                           <li class="list-group-item">
+                            Product name:<strong> <?php echo $products[$key]['name'] . "</strong> |  amount:<strong> " . $amount . "</strong>"; ?>
+                        <?php endforeach ?>
+                        </li>
+                    </ul>
+                    <a href="details.php" class="btn btn-success rounded-pill my-3">More details</a>               
+                </div>
+             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
       <div class="row justify-content-center">
         <?php foreach ($products as $key => $product): ?>
           <div class="col-3 my-3">
